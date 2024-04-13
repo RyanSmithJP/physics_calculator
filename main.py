@@ -22,7 +22,7 @@ def main():
     button_gravity = ttk.Button(home_frame,style="Custom.TButton", text="Gravity calculator", command=lambda: showSettings(home_frame,gravity_frame))
     button_gravity.grid(row=1, columnspan=2)
     button_precision = ttk.Button(home_frame,style="Custom.TButton", text="Precision", command=lambda: showSettings(home_frame,settings_frame)) #switch to precision on click
-    button_precision.grid(row=2, columnspan=2)
+    button_precision.grid(row=2, columnspan=2,sticky="ew")
     #***********************************************
     
     #show gravity_frame
