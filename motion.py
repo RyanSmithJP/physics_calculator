@@ -1,4 +1,7 @@
 import tkinter as tk
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg #tkinder integration
+import numpy as np
 from settings import goBack
 class MotionFrame(tk.Frame):
     def __init__(self, master=None, precision=None, **kwargs):
@@ -27,14 +30,30 @@ class MotionFrame(tk.Frame):
         #result
         self.label_v_result = tk.Label(self, text="")
         self.label_v_result.grid(row=4, columnspan=2)
+        #Matplotlib graph - make new frame
+        self.graph_frame = tk.Frame(self)
+        self.graph_frame.grid(row=5, columnspan=2)
     def calculate_final_speed(self,precision):
         try:
             u = float(self.entry_u.get())
             a = float(self.entry_a.get())
             t = float(self.entry_t.get())
-            result = u+a*t
-            self.label_v_result.config(text=f'Final speed = {result:.{precision.get()}f} m/s')
+            v = u+a*t
+            self.label_v_result.config(text=f'Final speed = {v:.{precision.get()}f} m/s')
             self.label_v_result.grid(row=4, columnspan=2)
+            #graph result
+            graph = plt.figure()
+            plt.title("Change in velocity over time")
+            plt.xlabel("Time (s)")
+            plt.ylabel("Velocity (ms)")
+            plt.grid(True)
+            xpoints = np.array([0,t])
+            ypoints = np.array([u,v])
+            plt.plot(xpoints,ypoints)
+            #integrate with tkinter
+            self.canvas = FigureCanvasTkAgg(plt.gcf(), master=self.graph_frame) #get graph
+            self.canvas.draw()
+            self.canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=True) #position
         except ValueError:
             self.label_v_result.config(text='Please enter valid parameters')
             self.label_v_result.grid(row=4, columnspan=2)
