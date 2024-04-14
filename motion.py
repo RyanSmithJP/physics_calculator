@@ -33,6 +33,7 @@ class MotionFrame(tk.Frame):
         #Matplotlib graph - make new frame
         self.graph_frame = tk.Frame(self)
         self.graph_frame.grid(row=5, columnspan=2)
+        self.close_window()
     def calculate_final_speed(self,precision):
         try:
             u = float(self.entry_u.get())
@@ -41,8 +42,12 @@ class MotionFrame(tk.Frame):
             v = u+a*t
             self.label_v_result.config(text=f'Final speed = {v:.{precision.get()}f} m/s')
             self.label_v_result.grid(row=4, columnspan=2)
+            self.plot_graph(u,v,t)
+        except ValueError:
+            self.label_v_result.config(text='Please enter valid parameters')
+            self.label_v_result.grid(row=4, columnspan=2)
+    def plot_graph(self,u,v,t):
             #graph result
-            graph = plt.figure()
             plt.title("Change in velocity over time")
             plt.xlabel("Time (s)")
             plt.ylabel("Velocity (ms)")
@@ -54,9 +59,6 @@ class MotionFrame(tk.Frame):
             self.canvas = FigureCanvasTkAgg(plt.gcf(), master=self.graph_frame) #get graph
             self.canvas.draw()
             self.canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=True) #position
-        except ValueError:
-            self.label_v_result.config(text='Please enter valid parameters')
-            self.label_v_result.grid(row=4, columnspan=2)
     def change_units(self,new_units):
         if(new_units=="m"):
             self.distance_units = "m"
@@ -64,3 +66,8 @@ class MotionFrame(tk.Frame):
             self.distance_units = "km"
         self.label_radius.config(text=f"Radius ({self.distance_units}):")
         self.label_g_result.grid_remove()
+    def close_window(self): #reference delete_window then close events
+        self.master.protocol("WM_DELETE_WINDOW", self.on_close)
+    def on_close(self):
+        plt.close() #close plot
+        self.master.destroy() #destroy app
