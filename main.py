@@ -5,6 +5,7 @@ from settings import showSettings
 from settings_frame import SettingsFrame
 from gravity import GravityFrame
 from gravitational_force import GravitationalFrame
+from motion import MotionFrame
 def main():
     root = tk.Tk()
     root.title("Physics app")
@@ -14,6 +15,7 @@ def main():
     home_frame = tk.Frame(root, bg="#7AA2E3")
     gravity_frame = GravityFrame(root,precision)
     gravitational_frame = GravitationalFrame(root,precision)
+    motion_frame = MotionFrame(root,precision)
     settings_frame = SettingsFrame(root,precision)
     '''
     colors:
@@ -30,8 +32,10 @@ def main():
     button_gravity.grid(row=1, columnspan=2, sticky="ew")
     button_gravitational_force = ttk.Button(home_frame,style="Custom.TButton", text="Gravitational Force Calculator", command=lambda: showSettings(home_frame,gravitational_frame))
     button_gravitational_force.grid(row=2, columnspan=2)
+    button_motion = ttk.Button(home_frame,style="Custom.TButton", text="Motion Calculator", command=lambda: showSettings(home_frame,motion_frame))
+    button_motion.grid(row=3, columnspan=2)
     button_precision = ttk.Button(home_frame,style="Custom.TButton", text="Precision", command=lambda: showSettings(home_frame,settings_frame)) #switch to precision on click
-    button_precision.grid(row=3, columnspan=2,sticky="ew")
+    button_precision.grid(row=4, columnspan=2,sticky="ew")
     #***********************************************
     
     #show gravity_frame
