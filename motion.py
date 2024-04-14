@@ -48,6 +48,13 @@ class MotionFrame(tk.Frame):
             self.label_v_result.grid(row=4, columnspan=2)
     def plot_graph(self,u,v,t):
             #graph result
+            #integrate with tkinter check if canvas exists
+            if hasattr(self,'canvas'):
+                plt.clf()
+            else:
+                graph = plt.figure()
+                self.canvas = FigureCanvasTkAgg(graph, master=self.graph_frame) #get graph
+                self.canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=True) #position
             plt.title("Change in velocity over time")
             plt.xlabel("Time (s)")
             plt.ylabel("Velocity (ms)")
@@ -55,10 +62,7 @@ class MotionFrame(tk.Frame):
             xpoints = np.array([0,t])
             ypoints = np.array([u,v])
             plt.plot(xpoints,ypoints)
-            #integrate with tkinter
-            self.canvas = FigureCanvasTkAgg(plt.gcf(), master=self.graph_frame) #get graph
             self.canvas.draw()
-            self.canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=True) #position
     def change_units(self,new_units):
         if(new_units=="m"):
             self.distance_units = "m"
